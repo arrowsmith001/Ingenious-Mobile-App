@@ -1,0 +1,31 @@
+The  Assignment Details:  
+You will be creating 3 screens of a larger mobile application (screens attached). The font used is Nanum Gothic and the blue, purple and pink colour codes are 0B54FE, 8532DF and FC0EC0 respectively.
+
+Screen 1 requirements:
+Implement the UI
+The arrow in the bottom right should transition to Screen
+
+Screen 2 requirements:
+Implement the UI
+When the email and password text fields are not empty and the sign in button is pressed, transition to page 3
+The Google, Apple and Facebook buttons do not need to be functional
+
+Screen 3 requirements:
+ Implement the UI
+When the username text field is not empty and the next button is pressed, print the users email, password and username to the console
+ When the previous button is pressed, transition back to Screen 2
+
+﻿
+App dev comp screens.zip
+433 KB
+
+﻿
+
+You should submit:
+ A zip file containing a Flutter project runnable via Android Studio
+
+We will be looking for:
+All functionality implemented correctly
+Clean code
+Well architected code
+A 100% match in your UI to the mockups, a good looking rough approximation will suffice
