@@ -135,13 +135,13 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         MyRRect(Colors.black12),
-                                        MyRRect(AppColors.gradient_color_1),
+                                        MyRRect(AppColors.gradient_color_blue),
                                         MyRRect(Colors.black12),
                                       ],
                                     ),
 
                                     CupertinoButton(
-                                      child: Icon(Icons.arrow_forward, color: AppColors.gradient_color_1,),
+                                      child: Icon(Icons.arrow_forward, color: AppColors.gradient_color_blue,),
                                       onPressed: () {
                                         //Navigator.push(context, EnterExitRoute(exitPage: this.widget, enterPage: Screen2()));
                                         Navigator.push(context, CupertinoPageRoute(builder: (context) => Screen2()));
