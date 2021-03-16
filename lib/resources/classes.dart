@@ -4,6 +4,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
+// These methods are open to modification if more specific validation is required
+class Validators{
+
+  static String EmailValidation<T>(T value){
+    if(value.toString() == "") return "This field must not be empty";
+    return null;
+  }
+
+  static String PasswordValidation<T>(T value){
+    if(value.toString() == "") return "This field must not be empty";
+    return null;
+  }
+
+  // Open to modification if more specific validation is required
+  static String UsernameValidation<T>(T value){
+    if(value.toString() == "") return "This field must not be empty";
+    return null;
+  }
+}
+
+
 // Singleton class for managing user credentials
 class UserCredentialsManager {
   String _email;
@@ -131,5 +152,25 @@ class OvershootInterpolator extends Interpolator{
   double getValue(double t) {
     return (T+1) * pow(t-1,3) + T * pow(t-1,2) + 1;
   }
-
 }
+
+class AnticipateInterpolator extends Interpolator{
+  AnticipateInterpolator({this.T});
+  double T = 1;
+
+  @override
+  double getValue(double t) {
+    return (T+1) * pow(t,3) - T * pow(t,2);
+  }
+}
+class AnticipateOvershootInterpolator extends Interpolator{
+  AnticipateOvershootInterpolator({this.T});
+  double T = 1;
+
+  @override
+  double getValue(double t) {
+    if(t<0.5) return 0.5*((T+1)*pow(2*t,3)-T*(pow(2*t,2)));
+    return 0.5*((T+1)*pow(2*t-2,3)+T*(pow(2*t-2,2))) + 1;
+  }
+}
+

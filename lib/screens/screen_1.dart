@@ -3,7 +3,96 @@ import 'package:flutter/material.dart';
 
 import '../resources/classes.dart';
 import '../resources/widgets.dart';
+import '../resources/extensions.dart';
 import 'screen_2.dart';
+
+
+class Screen1_Title extends StatelessWidget {
+  Screen1_Title(this.animationValue);
+  final double animationValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Hubwork', style: Screen1Styles.titleStyleAnimated(animationValue), textAlign: TextAlign.center),
+        Text('Reconnecting People', style: TextStyle(fontSize: 17.5)),
+      ],
+    );
+  }
+}
+
+
+class Screen1_Image extends StatelessWidget {
+  Screen1_Image({this.width});
+  double width = 275;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(AppImages.Screen1_image, width: this.width,);
+  }
+}
+
+
+class Screen1_SubtitleText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text('Message freelancers\ndirectly or post a job that\nneeds doing',
+              style: Screen1Styles.subtitleStyle(),
+              textAlign: TextAlign.center)
+        ]
+    );
+  }
+}
+
+
+class Screen1_FindOutMore extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text('Find out more',
+        style: TextStyle(
+            color: Colors.grey,
+            fontSize: 13));
+  }
+}
+
+
+class Screen1_NavigationPanel extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+        alignment: Alignment.bottomCenter,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              // (1) Left: Page indicator? (not functional)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MyRRect(Colors.black12),
+                  MyRRect(AppColors.gradient_color_blue),
+                  MyRRect(Colors.black12),
+                ],
+              ),
+
+              // (2) Right: "Next" button
+              CupertinoButton(
+                child: Icon(Icons.arrow_forward, color: AppColors.gradient_color_blue,),
+                onPressed: () {
+                  //Navigator.push(context, EnterExitRoute(exitPage: this.widget, enterPage: Screen2()));
+                  Navigator.push(context, CupertinoPageRoute(builder: (context) => Screen2()));
+
+                },)
+            ],
+          )
+    );
+  }
+}
+
 
 
 class Screen1 extends StatefulWidget {
@@ -19,12 +108,7 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: Duration(seconds: 3));
-    _controller.addListener(() {
-      setState(() {
-
-      });
-    });
-
+    _controller.addListener(() {  setState(() {});  });
     _controller.repeat();
   }
 
@@ -34,129 +118,53 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+
+  // Structure: The bottom edge of the image is the vertical center, and other widgets are spaced vertically around this
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
+        body: Stack(
+            children: [
 
-                // (1) Upper quarter
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+              // (1) Main screen features
+              Center(
+                child: Column(
                     children: [
 
-                      Column(
-                        children: [
-                          Text('Hubwork', style: Screen1Styles.titleStyleAnimated(_controller.value), textAlign: TextAlign.center),
-                          Text('Reconnecting People', style: TextStyle(fontSize: 17.5)),
-                        ],
-                      ),
-
-                    ],),),
-
-                // (2) Upper-middle quarter
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-
-                      Flexible(
-                          flex: 1,
-                          child: Container()
-                      ),
-
-                      Flexible(
-                          flex: 3,
-                          child: Image.asset(AppImages.Screen1_image)),
-                    ],),),
-
-                // (3) Lower-middle quarter
-                Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-
-                        Flexible(
-                            flex: 9,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text('Message freelancers\ndirectly or post a job that\nneeds doing',
-                                        style: Screen1Styles.subtitleStyle(),
-                                        textAlign: TextAlign.center)
-                                  ]
-                              ),
-
-                            )),
-                        Flexible(
-                            flex: 4,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Find out more',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13))
-                                ]
-                            )
-                        )
-
-                      ],
-                    )
-                ),
-
-                // (4) Lower quarter
-                Expanded(
-                  child: Column(
-                    children: [
-
-                      Expanded(child: Container()),
-
+                      // (1-1) Upper half
                       Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
 
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
+                            Screen1_Title(_controller.value),
 
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        MyRRect(Colors.black12),
-                                        MyRRect(AppColors.gradient_color_blue),
-                                        MyRRect(Colors.black12),
-                                      ],
-                                    ),
+                            Screen1_Image(width: 275).Padded(const EdgeInsets.fromLTRB(0,50,0, 0))
 
-                                    CupertinoButton(
-                                      child: Icon(Icons.arrow_forward, color: AppColors.gradient_color_blue,),
-                                      onPressed: () {
-                                        //Navigator.push(context, EnterExitRoute(exitPage: this.widget, enterPage: Screen2()));
-                                        Navigator.push(context, CupertinoPageRoute(builder: (context) => Screen2()));
+                          ],),
+                      ),
 
-                                      },)
-                                  ],
-                                ),
-                              )
-                            ],
+                      // (1-2) Lower half
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
 
-                          ))
-                    ],),),
+                            Screen1_SubtitleText().Padded(const EdgeInsets.fromLTRB(12, 45, 12, 28)),
 
-              ]
-          ),
+                            Screen1_FindOutMore()
+
+                          ],),
+                      )
+                    ]
+                ),
+              ),
+
+              // (2) Navigation panel
+              Screen1_NavigationPanel().Padded(const EdgeInsets.fromLTRB(25, 0, 25, 50))
+
+            ]
         ),
       ),
     );

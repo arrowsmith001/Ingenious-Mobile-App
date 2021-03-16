@@ -3,19 +3,129 @@ import 'package:flutter/material.dart';
 
 import '../resources/classes.dart';
 import '../resources/widgets.dart';
+import '../resources/extensions.dart';
 import 'screen_3.dart';
 
-// Open to modification if more specific validation is required
-String EmailValidation<T>(T value){
-  if(value.toString() == "") return "This field must not be empty";
-  return null;
+
+class Screen2_Title extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Sign In', style: Screen2Styles.titleStyle()).Padded(const EdgeInsets.fromLTRB(0,0,0,4)),
+        Text(
+            'Just one step away to\nexpore who\'s around you',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18)).Padded(const EdgeInsets.fromLTRB(0,4,0,0))
+      ],
+    );
+  }
 }
 
-// Open to modification if more specific validation is required
-String PasswordValidation<T>(T value){
-  if(value.toString() == "") return "This field must not be empty";
-  return null;
+class Screen2_SignInButton extends StatelessWidget {
+
+  Screen2_SignInButton(this.validateForm);
+  void Function(BuildContext context) validateForm;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: DecoratedBox(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        AppColors.gradient_color_blue,
+                        AppColors.gradient_color_purple,
+                        AppColors.gradient_color_pink,
+                      ]
+                  ),
+                  borderRadius: BorderRadius.circular(10)),
+              child: CupertinoButton(
+                  onPressed: () {
+                    validateForm(context);
+                  },
+                  padding: const EdgeInsets.symmetric(vertical: 18.0),
+                  child: Text('Sign in',
+                      style: TextStyle( // TODO Fix font
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white))),
+            ),
+        ),
+      ],
+    );
+  }
 }
+
+class Screen2_ForgotPassword extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text('Forgot Password?', style: TextStyle(fontSize: 14, color: Colors.black38));
+  }
+}
+
+class Screen2_OrDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+
+        DividerLine(),
+
+        Container(
+            width: 30,
+            child: Text('OR', style: TextStyle(fontSize: 16), textAlign: TextAlign.center,),
+            color: Theme.of(context).scaffoldBackgroundColor)
+      ],
+    );
+  }
+}
+
+class Screen2_SocialMediaButtons extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+        SocialMediaButton(
+            AppImages.google_icon,
+            Colors.red),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: 25.0),
+
+          child: SocialMediaButton(
+              AppImages.apple_icon,
+              Colors.black),
+        ),
+
+        SocialMediaButton(
+            AppImages.facebook_icon,
+            Color(0xff0074bf)),
+      ],
+    );
+  }
+}
+
+
+class Screen2_TermsOfServiceText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'By signing in to Hubwork, you agree to our Terms of\nService. Learn how we process your data in our privacy\npolicy.',
+      textAlign: TextAlign.center,);
+  }
+}
+
+
+
+
 
 class Screen2 extends StatefulWidget {
   @override
@@ -34,8 +144,8 @@ class _Screen2State extends State<Screen2> {
 
     // Sets text field borders red if user entry is invalid
     setState(() {
-      emailValidation = EmailValidation(_emailUsernameController.text);
-      passwordValidation = PasswordValidation(_passwordController.text);
+      emailValidation = Validators.EmailValidation(_emailUsernameController.text);
+      passwordValidation = Validators.PasswordValidation(_passwordController.text);
     });
 
     if(emailValidation != null || passwordValidation != null){
@@ -66,172 +176,64 @@ class _Screen2State extends State<Screen2> {
   @override
   Widget build(BuildContext context) {
 
-    // Flex values for managing the space
-    int titleFlex = 3;
-    int textField1Flex = 2;
-    int textField2Flex = 2;
-    int signInButtonFlex = 2;
-    int forgotPasswordFlex = 1;
-    int orDividerFlex = 1;
-    int socialMediaButtonsFlex = 3;
-    int smallprintFlex = 2;
-
+    // Structure: The "Sign In" button is the vertical center, and other widgets are spaced vertically around this
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Container(
-          child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column (
-                    children: [
+        body: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28.0),
+              child: Column (
+                children: [
 
-                    Expanded(
+                  Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
 
-                        // TITLE: Sign in, ...
-                        Flexible(
-                          flex: titleFlex,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text('Sign In', style: Screen2Styles.titleStyle()),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                      'Just one step away to\nexpore who\'s around you',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 18)),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                        Screen2_Title()
+                            .Padded(const EdgeInsets.fromLTRB(0, 0, 0, 24)),
 
                         // TEXT FIELD 1 for Email/Username
-                        Flexible(
-                          flex: textField1Flex,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: MyCupertinoTextField(
-                                controller: _emailUsernameController,
-                                textEntryType: TextEntryType.email,
-                                valid: emailValidation == null),
-                          ),
-                        ),
+                        MyCupertinoTextField(controller: _emailUsernameController, textEntryType: TextEntryType.email, valid: emailValidation == null)
+                          .Padded(const EdgeInsets.symmetric(vertical: 6)),
 
                         // TEXT FIELD 2 for Password
-                        Flexible(
-                          flex: textField2Flex,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: MyCupertinoTextField(
-                                controller: _passwordController,
-                                textEntryType: TextEntryType.password,
-                                valid: passwordValidation == null
-                            ),
-                          ),
-                        ),
+                        MyCupertinoTextField(controller: _passwordController, textEntryType: TextEntryType.password, valid: passwordValidation == null)
+                            .Padded(const EdgeInsets.symmetric(vertical: 6)),
 
-                        // SIGN IN BUTTON
-                        Flexible(
-                            flex: signInButtonFlex,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16.0),
-                              child: Row(
-                                children: [
-                                  Screen2SignInButton(validateForm)
-                                ],
-                              ),
-                            )),
+                      ],
+                    ),
+                  ),
 
-                        // FORGOT PASSWORD PROMPT
-                        Flexible(
-                          flex: forgotPasswordFlex,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Text('Forgot Password?', style: TextStyle(fontSize: 14, color: Colors.black38)),
-                          ),
-                        ),
+                  Screen2_SignInButton(validateForm)
+                      .Padded(const EdgeInsets.symmetric(vertical: 18.0)),
 
-                        // OR DIVIDER
-                        Flexible(
-                          flex: orDividerFlex,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Stack(
-                              children: [
-                                Center(child: DividerLine()),
-                                Center(
-                                    child: Container(
-                                        width: 30,
-                                        child: Text('OR', style: TextStyle(fontSize: 16), textAlign: TextAlign.center,),
-                                        color: Theme.of(context).scaffoldBackgroundColor))
-                              ],
-                            ),
-                          ),
-                        ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
 
-                        // SOCIAL MEDIA SIGN-IN BUTTONS
-                        Flexible(
-                          flex: socialMediaButtonsFlex,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                        Screen2_ForgotPassword()
+                            .Padded(const EdgeInsets.symmetric(vertical: 8.0)),
 
-                                SocialMediaButton(
-                                    AppImages.google_icon,
-                                    Colors.red),
+                        Screen2_OrDivider()
+                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)),
 
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25.0),
+                        Screen2_SocialMediaButtons()
+                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)),
 
-                                  child: SocialMediaButton(
-                                      AppImages.apple_icon,
-                                      Colors.black),
-                                ),
-
-                                SocialMediaButton(
-                                    AppImages.facebook_icon,
-                                    Color(0xff0074bf)),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // TERMS OF SERVICE SMALLPRINT
-                        Flexible(
-                          flex: smallprintFlex,
-                          child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                                child: Text(
-                                  'By signing in to Hubwork, you agree to our Terms of\nService. Learn how we process your data in our privacy\npolicy.',
-                                  textAlign: TextAlign.center,),
-                              )
-                          ),
-                        )
+                        Screen2_TermsOfServiceText()
+                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)),
 
 
                       ],
                     ),
-        ),
+                  ),
 
-        ],
-      ),
-              )
-          ),
+                ],
+              ),
+            )
         ),
       ),
     );

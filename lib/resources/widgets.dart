@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +71,7 @@ class MyCupertinoTextField extends StatelessWidget {
       placeholderStyle: TextStyle(color: Color(0xff5f5f5f)),
       placeholder: placeholderText,
       obscureText: obscureText,
+      cursorColor: AppColors.gradient_color_blue,
       decoration: BoxDecoration(
           border: Border.all(color: valid ? Colors.transparent : Color(
               0xffffa2a2), width: 1),
@@ -82,38 +85,9 @@ class MyCupertinoTextField extends StatelessWidget {
   }
 }
 
-class Screen2SignInButton extends StatelessWidget {
 
-  Screen2SignInButton(this.validateForm);
-  void Function(BuildContext context) validateForm;
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  AppColors.gradient_color_blue,
-                  AppColors.gradient_color_purple,
-                  AppColors.gradient_color_pink,
-                ]
-            ),
-            borderRadius: BorderRadius.circular(10)),
-        child: CupertinoButton(
-            onPressed: () {
-              validateForm(context);
-            },
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: Text('Sign in',
-                style: TextStyle( // TODO Fix font
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white))),
-      ),
-    );
-  }
-}
+
 
 class DividerLine extends StatelessWidget {
 
@@ -134,7 +108,6 @@ class DividerLine extends StatelessWidget {
 
   }
 }
-
 
 
 class SocialMediaButton extends StatelessWidget {
@@ -191,8 +164,13 @@ class GradientIcon extends StatelessWidget {
 }
 
 
+enum AnimationMode{scale, spin, jump, orbit}
+
 class Screen3AtSymbol extends StatefulWidget {
-  Screen3AtSymbol({@required this.radius, @required this.thickness, @required this.iconSize});
+  Screen3AtSymbol(this.animationValue, this.animationMode, {@required this.radius, @required this.thickness, @required this.iconSize});
+
+  final double animationValue;
+  final AnimationMode animationMode;
 
   final double radius;
   final double thickness;
@@ -202,53 +180,54 @@ class Screen3AtSymbol extends StatefulWidget {
   _Screen3AtSymbolState createState() => _Screen3AtSymbolState();
 }
 
-class _Screen3AtSymbolState extends State<Screen3AtSymbol> with SingleTickerProviderStateMixin {
+class _Screen3AtSymbolState extends State<Screen3AtSymbol> {
 
-  AnimationController _controller;
-  Interpolator interp = new OvershootInterpolator(T: 1);
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 750));
-    _controller.addListener(() {setState(() {
-
-    });});
-
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      _controller.forward(from: 0);
-    });
-  }
-
-
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  Interpolator overshootInterp = new OvershootInterpolator(T: 1);
+  Interpolator anticipateOvershootInterp = new AnticipateOvershootInterpolator(T: 5);
 
   @override
   Widget build(BuildContext context) {
 
-    Widget icon = Transform.scale(
-        scale: interp.getValue(_controller.value),
-        child: GradientIcon(Icons.alternate_email, widget.iconSize,
-            LinearGradient(
-                begin:Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.gradient_color_pink,
-                  AppColors.gradient_color_purple,
-                  AppColors.gradient_color_blue,
-                ],
-                stops: [
-                  0.2,
-                  0.6,
-                  0.8
-                ]
-            )),);
+    // The "@" icon alone
+    Widget icon = GradientIcon(Icons.alternate_email, widget.iconSize,
+        LinearGradient(
+            begin:Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.gradient_color_pink,
+              AppColors.gradient_color_purple,
+              AppColors.gradient_color_blue,
+            ],
+            stops: [
+              0.2,
+              0.6,
+              0.8
+            ]
+        ));
 
+    switch(widget.animationMode){
+
+      case AnimationMode.scale:
+        // Scale animation
+        icon = Transform.scale(
+          scale: overshootInterp.getValue(widget.animationValue),
+          child: icon,);
+        break;
+      case AnimationMode.spin:
+        // Rotate animation
+        icon = Transform.rotate(
+          angle: -pi*2*anticipateOvershootInterp.getValue(widget.animationValue),
+          child: icon,);
+        break;
+      case AnimationMode.jump:
+        throw UnimplementedError();
+        break;
+      case AnimationMode.orbit:
+        throw UnimplementedError();
+        break;
+    }
+
+    // Containing circle
     return CircleAvatar(
       radius: widget.radius + widget.thickness/2,
       backgroundColor: Colors.black12,
