@@ -3,6 +3,21 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class SizeConfig {
+  static MediaQueryData _mediaQueryData;
+  static double screenWidth;
+  static double screenHeight;
+  static double blockSizeHorizontal;
+  static double blockSizeVertical;
+
+  void init(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
+  }
+}
 
 // These methods are open to modification if more specific validation is required
 class Validators{
@@ -173,4 +188,38 @@ class AnticipateOvershootInterpolator extends Interpolator{
     return 0.5*((T+1)*pow(2*t-2,3)+T*(pow(2*t-2,2))) + 1;
   }
 }
+class BounceInterpolator extends Interpolator{
+  BounceInterpolator();
+
+  @override
+  double getValue(double t) {
+    if(t<0.31489) return 8*pow(1.1226*t,2);
+    if(t<0.65990) return 8*pow(1.1226*t - 0.54719, 2) + 0.7;
+    if(t<0.85908) return 8*pow(1.1226*t - 0.8526, 2) + 0.9;
+    return 8*pow(1.1226*t - 1.0435, 2) + 0.95;
+  }
+}
+
+class DecelerateInterpolator extends Interpolator{
+  DecelerateInterpolator();
+
+  @override
+  double getValue(double t) {
+    return 1 - pow(1-t, 2);
+  }
+}
+
+class JumpThenBounceInterpolator extends Interpolator{
+
+  JumpThenBounceInterpolator();
+  Interpolator decel = new DecelerateInterpolator();
+  Interpolator bounce = new BounceInterpolator();
+
+  @override
+  double getValue(double t) {
+      if(t < 0.5) return decel.getValue(2*t);
+      return 1-bounce.getValue(2*(t-0.5));
+  }
+}
+
 

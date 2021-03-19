@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'resources/classes.dart';
 import 'screens/screen_1.dart';
 import 'screens/screen_2.dart';
 
@@ -12,6 +13,7 @@ import 'screens/screen_2.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

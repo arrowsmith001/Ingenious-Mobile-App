@@ -1,9 +1,125 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:math';
+import '../resources/extensions.dart';
 import '../resources/classes.dart';
 import '../resources/widgets.dart';
 
+enum AnimationMode{scale, spin, jump, orbit}
+
+class Screen3AtSymbol extends StatefulWidget {
+  Screen3AtSymbol(this.animationValue, this.animationMode, {@required this.radius, @required this.thickness, @required this.iconSize});
+
+  final double animationValue;
+  final AnimationMode animationMode;
+
+  final double radius;
+  final double thickness;
+  final double iconSize;
+
+  @override
+  _Screen3AtSymbolState createState() => _Screen3AtSymbolState();
+}
+
+class _Screen3AtSymbolState extends State<Screen3AtSymbol> {
+
+  Interpolator overshootInterp = new OvershootInterpolator(T: 1);
+  Interpolator anticipateOvershootInterp = new AnticipateOvershootInterpolator(T: 5);
+  Interpolator bounceInterp = new BounceInterpolator();
+  Interpolator jumpThenBounceInterp = new JumpThenBounceInterpolator();
+
+  @override
+  Widget build(BuildContext context) {
+
+    // The "@" icon alone
+    Widget icon = GradientIcon(Icons.alternate_email, widget.iconSize,
+        LinearGradient(
+            begin:Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.gradient_color_pink,
+              AppColors.gradient_color_purple,
+              AppColors.gradient_color_blue,
+            ],
+            stops: [
+              0.2,
+              0.6,
+              0.8
+            ]
+        ));
+
+
+    // Containing circle
+    Widget circle = CircleAvatar(
+      radius: widget.radius + widget.thickness/2,
+      backgroundColor: Color(0xFFDCDCDC),
+      child: CircleAvatar(
+        radius: widget.radius - widget.thickness/2,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+    );
+
+    switch(widget.animationMode){
+
+      case AnimationMode.scale:
+      // Scale animation
+        icon = Transform.scale(
+          scale: overshootInterp.getValue(widget.animationValue),
+          child: icon,);
+        break;
+      case AnimationMode.spin:
+      // Rotate animation
+        icon = Transform.rotate(
+          angle: -pi*2*anticipateOvershootInterp.getValue(widget.animationValue),
+          child: icon,);
+        break;
+      case AnimationMode.jump:
+
+        icon = Transform.translate(
+          offset: Offset(0, -50*jumpThenBounceInterp.getValue(widget.animationValue)),
+          child: icon,);
+        break;
+      case AnimationMode.orbit:
+
+        double t = sin(widget.animationValue*2*pi);
+
+        icon = Transform.translate(
+          offset: Offset(t*100, t*-100),
+          child: icon,);
+
+        if(widget.animationValue > 0.25 && widget.animationValue < 0.75){
+          // Return reversed stack
+          return Stack(
+              children: [
+                Positioned.fill(child: Align(alignment: Alignment.center, child: icon)),
+                Align(alignment: Alignment.center, child: circle),
+              ]
+          );
+        }
+        break;
+    }
+
+    return Stack(
+        children: [
+          Align(alignment: Alignment.center, child: circle),
+          Positioned.fill(child: Align(alignment: Alignment.center, child: icon)),
+        ]
+    );
+
+  }
+}
+
+class Screen3_Title extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Username', style: Screen3Styles.titleStyle()).Padded(const EdgeInsets.all(6.0)),
+        Text('Choose your @username')
+      ],
+    );
+  }
+}
 
 
 
@@ -23,7 +139,7 @@ class _Screen3State extends State<Screen3> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(vsync: this, duration: Duration(milliseconds: 1750));
+    _animController = AnimationController(vsync: this, duration: Duration(milliseconds: 1250));
     _animController.addListener(() {setState(() {
 
     });});
@@ -60,7 +176,7 @@ class _Screen3State extends State<Screen3> with SingleTickerProviderStateMixin{
     print(ucm.getString());
 
     // Do a lil bounce
-    _animController.forward(from: 0.25);
+    _animController.forward(from: 0);
 
     setState(() {
       // Cycle to next animation
@@ -101,31 +217,17 @@ class _Screen3State extends State<Screen3> with SingleTickerProviderStateMixin{
                             children: [
 
                               // "@" symbol, with circle, at top of screen
-                              Screen3AtSymbol(_animController.value, animationMode, radius: 45, thickness: 4, iconSize: 37),
+                              Screen3AtSymbol(_animController.value, animationMode, radius: 45, thickness: 4, iconSize: 37).Padded(const EdgeInsets.fromLTRB(0,25,0,0)),
 
                               // "Username" title and subtitle
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 15, 0, 25),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Text('Username', style: Screen3Styles.titleStyle()),
-                                    ),
-                                    Text('Choose your @username')
-                                  ],
-                                ),
-                              ),
+                              Screen3_Title().Padded(const EdgeInsets.fromLTRB(0, 15, 0, 25)),
 
                               // Username text field
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: MyCupertinoTextField(
+                              MyCupertinoTextField(
                                   controller: _textEditingController,
                                   textEntryType: TextEntryType.username,
                                   valid: usernameValidation == null,
-                                ),
-                              )
+                                ).Padded(const EdgeInsets.symmetric(vertical: 8.0))
 
                             ],
                           )
@@ -146,7 +248,7 @@ class _Screen3State extends State<Screen3> with SingleTickerProviderStateMixin{
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,15,50),
+                  padding: const EdgeInsets.fromLTRB(15,0,15,25),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

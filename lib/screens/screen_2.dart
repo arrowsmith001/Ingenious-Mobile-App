@@ -118,7 +118,7 @@ class Screen2_TermsOfServiceText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'By signing in to Hubwork, you agree to our Terms of\nService. Learn how we process your data in our privacy\npolicy.',
+      'By signing in to Hubwork, you agree to our Terms of Service. Learn how we process your data in our privacy policy.',
       textAlign: TextAlign.center,);
   }
 }
@@ -192,15 +192,15 @@ class _Screen2State extends State<Screen2> {
                       children: [
 
                         Screen2_Title()
-                            .Padded(const EdgeInsets.fromLTRB(0, 0, 0, 24)),
+                            .Padded(const EdgeInsets.fromLTRB(0, 24, 0, 24)),
 
                         // TEXT FIELD 1 for Email/Username
                         MyCupertinoTextField(controller: _emailUsernameController, textEntryType: TextEntryType.email, valid: emailValidation == null)
-                          .Padded(const EdgeInsets.symmetric(vertical: 6)),
+                          .Padded(const EdgeInsets.symmetric(vertical: 6)).MakeFlexible(),
 
                         // TEXT FIELD 2 for Password
                         MyCupertinoTextField(controller: _passwordController, textEntryType: TextEntryType.password, valid: passwordValidation == null)
-                            .Padded(const EdgeInsets.symmetric(vertical: 6)),
+                            .Padded(const EdgeInsets.symmetric(vertical: 6)).MakeFlexible(),
 
                       ],
                     ),
@@ -215,13 +215,13 @@ class _Screen2State extends State<Screen2> {
                       children: [
 
                         Screen2_ForgotPassword()
-                            .Padded(const EdgeInsets.symmetric(vertical: 8.0)),
+                            .Padded(const EdgeInsets.symmetric(vertical: 8.0)).MakeFlexible(),
 
                         Screen2_OrDivider()
-                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)),
+                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)).MakeFlexible(),
 
                         Screen2_SocialMediaButtons()
-                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)),
+                            .Padded(const EdgeInsets.symmetric(vertical: 12.0)).MakeFlexible(),
 
                         Screen2_TermsOfServiceText()
                             .Padded(const EdgeInsets.symmetric(vertical: 12.0)),

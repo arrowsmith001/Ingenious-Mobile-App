@@ -7,4 +7,15 @@ extension WidgetModifier on Widget {
       child: this,
     );
   }
+  Widget MakeFlexible([int flex = 1]) {
+    return Flexible(
+      flex: flex,
+      child: this,
+    );
+  }
+  Widget MakeExpanded() {
+    return Expanded(
+      child: this,
+    );
+  }
 }

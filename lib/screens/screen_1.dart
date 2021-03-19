@@ -14,6 +14,7 @@ class Screen1_Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Hubwork', style: Screen1Styles.titleStyleAnimated(animationValue), textAlign: TextAlign.center),
         Text('Reconnecting People', style: TextStyle(fontSize: 17.5)),
@@ -24,12 +25,12 @@ class Screen1_Title extends StatelessWidget {
 
 
 class Screen1_Image extends StatelessWidget {
-  Screen1_Image({this.width});
-  double width = 275;
+  Screen1_Image({this.height});
+  double height = 150;
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(AppImages.Screen1_image, width: this.width,);
+    return Image.asset(AppImages.Screen1_image, height: height, fit: BoxFit.fitHeight,);
   }
 }
 
@@ -107,6 +108,7 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(vsync: this, duration: Duration(seconds: 3));
     _controller.addListener(() {  setState(() {});  });
     _controller.repeat();
@@ -120,6 +122,8 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
+    SizeConfig().init(context);
 
   // Structure: The bottom edge of the image is the vertical center, and other widgets are spaced vertically around this
     return SafeArea(
@@ -138,9 +142,9 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
 
-                            Screen1_Title(_controller.value),
+                            Screen1_Title(_controller.value).MakeFlexible(),
 
-                            Screen1_Image(width: 275).Padded(const EdgeInsets.fromLTRB(0,50,0, 0))
+                            Screen1_Image(height: SizeConfig.blockSizeVertical*20).Padded(const EdgeInsets.fromLTRB(0,0,0, 0)).MakeFlexible(),
 
                           ],),
                       ),
@@ -153,7 +157,7 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
 
                             Screen1_SubtitleText().Padded(const EdgeInsets.fromLTRB(12, 45, 12, 28)),
 
-                            Screen1_FindOutMore()
+                            Screen1_FindOutMore().MakeFlexible(),
 
                           ],),
                       )
@@ -162,7 +166,7 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
               ),
 
               // (2) Navigation panel
-              Screen1_NavigationPanel().Padded(const EdgeInsets.fromLTRB(25, 0, 25, 50))
+              Screen1_NavigationPanel().Padded(const EdgeInsets.fromLTRB(25, 0, 25, 25))
 
             ]
         ),
