@@ -3,23 +3,9 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SizeConfig {
-  static MediaQueryData _mediaQueryData;
-  static double screenWidth;
-  static double screenHeight;
-  static double blockSizeHorizontal;
-  static double blockSizeVertical;
-
-  void init(BuildContext context) {
-    _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData.size.width;
-    screenHeight = _mediaQueryData.size.height;
-    blockSizeHorizontal = screenWidth / 100;
-    blockSizeVertical = screenHeight / 100;
-  }
-}
 
 // These methods are open to modification if more specific validation is required
+// Their signature also conforms to the validation format used by the Form object
 class Validators{
 
   static String EmailValidation<T>(T value){
@@ -32,7 +18,6 @@ class Validators{
     return null;
   }
 
-  // Open to modification if more specific validation is required
   static String UsernameValidation<T>(T value){
     if(value.toString() == "") return "This field must not be empty";
     return null;
@@ -86,7 +71,7 @@ class AppColors{
   static const Color cupertino_textfield_background = Color(0xffeeeeee);
 }
 
-class AppImages{
+class AppImagePaths{
   static const String Screen1_image = 'assets/images/Screen1_crop.png';
   static const String apple_icon = 'assets/images/apple_icon.png';
   static const String google_icon = 'assets/images/google_icon.png';
@@ -142,6 +127,8 @@ class Screen2Styles {
       fontWeight: FontWeight.w600
   );
 
+  static TextStyle signInButtonStyle() => TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white);
+
   static TextStyle textFieldStyle() => TextStyle(color: Colors.black, decoration: TextDecoration.none);
 }
 
@@ -155,10 +142,12 @@ class Screen3Styles {
   static TextStyle textFieldStyle() => TextStyle(color: Colors.black, decoration: TextDecoration.none);
 }
 
+// Class for interpolating values for animations. They should expect values of t between 0 and 1.
 abstract class Interpolator{
   double getValue(double t);
 }
 
+// For animations that go slightly beyond the final threshold, then back
 class OvershootInterpolator extends Interpolator{
   OvershootInterpolator({this.T});
   double T = 1;
@@ -169,6 +158,7 @@ class OvershootInterpolator extends Interpolator{
   }
 }
 
+// For animations that go slightly behind the initial value, then forward
 class AnticipateInterpolator extends Interpolator{
   AnticipateInterpolator({this.T});
   double T = 1;
@@ -178,6 +168,8 @@ class AnticipateInterpolator extends Interpolator{
     return (T+1) * pow(t,3) - T * pow(t,2);
   }
 }
+
+// For animations that go slightly behind the initial value and slightly beyond the final threshold
 class AnticipateOvershootInterpolator extends Interpolator{
   AnticipateOvershootInterpolator({this.T});
   double T = 1;
@@ -188,6 +180,8 @@ class AnticipateOvershootInterpolator extends Interpolator{
     return 0.5*((T+1)*pow(2*t-2,3)+T*(pow(2*t-2,2))) + 1;
   }
 }
+
+// For animations that want a "bounce" effect
 class BounceInterpolator extends Interpolator{
   BounceInterpolator();
 
@@ -200,6 +194,7 @@ class BounceInterpolator extends Interpolator{
   }
 }
 
+// For animations than slow down towards the end
 class DecelerateInterpolator extends Interpolator{
   DecelerateInterpolator();
 
@@ -209,6 +204,7 @@ class DecelerateInterpolator extends Interpolator{
   }
 }
 
+// For animations that want to jump and then return as a bounce
 class JumpThenBounceInterpolator extends Interpolator{
 
   JumpThenBounceInterpolator();

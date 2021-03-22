@@ -6,7 +6,7 @@ import '../resources/widgets.dart';
 import '../resources/extensions.dart';
 import 'screen_2.dart';
 
-
+// Title for Screen1
 class Screen1_Title extends StatelessWidget {
   Screen1_Title(this.animationValue);
   final double animationValue;
@@ -23,18 +23,18 @@ class Screen1_Title extends StatelessWidget {
   }
 }
 
-
+// Image for Screen1
 class Screen1_Image extends StatelessWidget {
-  Screen1_Image({this.height});
-  double height = 150;
+  Screen1_Image({this.width});
+  double width = 275;
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(AppImages.Screen1_image, height: height, fit: BoxFit.fitHeight,);
+    return Image.asset(AppImagePaths.Screen1_image, width: width, fit: BoxFit.fitHeight,);
   }
 }
 
-
+// Subtitle text for Screen1
 class Screen1_SubtitleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class Screen1_SubtitleText extends StatelessWidget {
   }
 }
 
-
+// "Find out more" prompt for Screen1
 class Screen1_FindOutMore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class Screen1_FindOutMore extends StatelessWidget {
   }
 }
 
-
+// Nav buttons for the bottom of Screen1
 class Screen1_NavigationPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -96,6 +96,7 @@ class Screen1_NavigationPanel extends StatelessWidget {
 
 
 
+// SCREEN 1
 class Screen1 extends StatefulWidget {
   @override
   _Screen1State createState() => _Screen1State();
@@ -103,12 +104,11 @@ class Screen1 extends StatefulWidget {
 
 class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
 
-  AnimationController _controller;
+  AnimationController _controller; // Controls title animation
 
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(vsync: this, duration: Duration(seconds: 3));
     _controller.addListener(() {  setState(() {});  });
     _controller.repeat();
@@ -123,9 +123,6 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 
-    SizeConfig().init(context);
-
-  // Structure: The bottom edge of the image is the vertical center, and other widgets are spaced vertically around this
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -144,7 +141,7 @@ class _Screen1State extends State<Screen1> with SingleTickerProviderStateMixin {
 
                             Screen1_Title(_controller.value).MakeFlexible(),
 
-                            Screen1_Image(height: SizeConfig.blockSizeVertical*20).Padded(const EdgeInsets.fromLTRB(0,0,0, 0)).MakeFlexible(),
+                            Screen1_Image(width: 275).Padded(const EdgeInsets.fromLTRB(0,0,0, 0)).MakeFlexible(),
 
                           ],),
                       ),

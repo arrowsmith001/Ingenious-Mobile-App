@@ -6,7 +6,7 @@ import '../resources/widgets.dart';
 import '../resources/extensions.dart';
 import 'screen_3.dart';
 
-
+// Title for Screen2
 class Screen2_Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,15 +14,14 @@ class Screen2_Title extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Sign In', style: Screen2Styles.titleStyle()).Padded(const EdgeInsets.fromLTRB(0,0,0,4)),
-        Text(
-            'Just one step away to\nexpore who\'s around you',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18)).Padded(const EdgeInsets.fromLTRB(0,4,0,0))
+        Text('Just one step away to\nexpore who\'s around you', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)).Padded(const EdgeInsets.fromLTRB(0,4,0,0))
       ],
     );
   }
 }
 
+
+// Sign-in button for Screen2
 class Screen2_SignInButton extends StatelessWidget {
 
   Screen2_SignInButton(this.validateForm);
@@ -49,17 +48,17 @@ class Screen2_SignInButton extends StatelessWidget {
                   },
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: Text('Sign in',
-                      style: TextStyle( // TODO Fix font
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white))),
+                      style: Screen2Styles.signInButtonStyle()),
             ),
         ),
+        )
       ],
     );
+
   }
 }
 
+// "Forgot password" prompt for Screen2
 class Screen2_ForgotPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -67,6 +66,7 @@ class Screen2_ForgotPassword extends StatelessWidget {
   }
 }
 
+// "OR" prompt with horizontal divider line for Screen2
 class Screen2_OrDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -85,6 +85,8 @@ class Screen2_OrDivider extends StatelessWidget {
   }
 }
 
+
+// Social media button panel for Screen2 (has no button functionality)
 class Screen2_SocialMediaButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -93,7 +95,7 @@ class Screen2_SocialMediaButtons extends StatelessWidget {
       children: [
 
         SocialMediaButton(
-            AppImages.google_icon,
+            AppImagePaths.google_icon,
             Colors.red),
 
         Padding(
@@ -101,19 +103,19 @@ class Screen2_SocialMediaButtons extends StatelessWidget {
               horizontal: 25.0),
 
           child: SocialMediaButton(
-              AppImages.apple_icon,
+              AppImagePaths.apple_icon,
               Colors.black),
         ),
 
         SocialMediaButton(
-            AppImages.facebook_icon,
+            AppImagePaths.facebook_icon,
             Color(0xff0074bf)),
       ],
     );
   }
 }
 
-
+// Terms of service text prompt for Screen2
 class Screen2_TermsOfServiceText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -125,8 +127,7 @@ class Screen2_TermsOfServiceText extends StatelessWidget {
 
 
 
-
-
+// SCREEN 2
 class Screen2 extends StatefulWidget {
   @override
   _Screen2State createState() => _Screen2State();
@@ -167,7 +168,6 @@ class _Screen2State extends State<Screen2> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _emailUsernameController.dispose();
     _passwordController.dispose();
@@ -176,7 +176,6 @@ class _Screen2State extends State<Screen2> {
   @override
   Widget build(BuildContext context) {
 
-    // Structure: The "Sign In" button is the vertical center, and other widgets are spaced vertically around this
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -186,6 +185,7 @@ class _Screen2State extends State<Screen2> {
               child: Column (
                 children: [
 
+                  // (1) Upper "half"
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -206,9 +206,11 @@ class _Screen2State extends State<Screen2> {
                     ),
                   ),
 
+                  // (2) Button positioned in center
                   Screen2_SignInButton(validateForm)
                       .Padded(const EdgeInsets.symmetric(vertical: 18.0)),
 
+                  // (3) Lower "half"
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,

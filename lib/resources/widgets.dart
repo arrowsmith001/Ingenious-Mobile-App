@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'classes.dart';
 
-
+// Rounded rectangle shape
 class MyRRect extends StatelessWidget{
   MyRRect(this.color);
   final Color color;
@@ -26,7 +26,7 @@ class MyRRect extends StatelessWidget{
   }
 }
 
-
+// iOS-style text field with desired formatting and features
 class MyCupertinoTextField extends StatelessWidget {
   MyCupertinoTextField({@required this.controller, @required this.textEntryType, bool valid}){
 
@@ -63,7 +63,7 @@ class MyCupertinoTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return CupertinoTextField(
       controller: controller,
       style: Screen2Styles.textFieldStyle(),
@@ -86,9 +86,7 @@ class MyCupertinoTextField extends StatelessWidget {
 }
 
 
-
-
-
+// Horizontal line that fades at each end, for page dividing
 class DividerLine extends StatelessWidget {
 
   @override
@@ -109,7 +107,7 @@ class DividerLine extends StatelessWidget {
   }
 }
 
-
+// Rounded button with a specified social media symbol and colour (has no button functionality)
 class SocialMediaButton extends StatelessWidget {
   SocialMediaButton(this.imagePath, this.borderColor);
   final String imagePath;
@@ -131,13 +129,9 @@ class SocialMediaButton extends StatelessWidget {
   }
 }
 
-
+// For applying a gradient to a specified icon
 class GradientIcon extends StatelessWidget {
-  GradientIcon(
-      this.icon,
-      this.size,
-      this.gradient,
-      );
+  GradientIcon(this.icon, this.size, this.gradient);
 
   final IconData icon;
   final double size;
@@ -149,11 +143,7 @@ class GradientIcon extends StatelessWidget {
       child: SizedBox(
         width: size * 1.2,
         height: size * 1.2,
-        child: Icon(
-          icon,
-          size: size,
-          color: Colors.white,
-        ),
+        child: Icon(icon, size: size, color: Colors.white),
       ),
       shaderCallback: (Rect bounds) {
         final Rect rect = Rect.fromLTRB(0, 0, size, size);
